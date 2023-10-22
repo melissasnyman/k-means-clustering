@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import random
 
 
 def main():
@@ -12,6 +13,24 @@ def main():
     plt.xlabel('Longitude')
     plt.ylabel('Latitude')
     plt.show()
+
+    k = int(input('How many clusters? '))
+    print(k)
+
+    sample_count = len(latitude)
+    points = []
+    indices = []
+
+    while len(points) < k:
+        sample_index = random.randint(0, sample_count - 1)
+
+        if sample_index not in indices:
+            point = {'sample_index': sample_index,
+                     'coordinates': [longitude[sample_index], latitude[sample_index]]}
+            points.append(point)
+            indices.append(sample_index)
+
+    print(points)
 
 
 if __name__ == '__main__':
