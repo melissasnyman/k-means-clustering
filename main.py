@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import random
@@ -5,11 +6,11 @@ import random
 
 def main():
     airbnb = pd.read_csv('airbnb.csv')
-    latitude = airbnb['latitude']
-    longitude = airbnb['longitude']
-    latitude = latitude.to_numpy()
-    longitude = longitude.to_numpy()
-    plt.scatter(x=longitude, y=latitude)
+    latitudes = airbnb['latitude']
+    longitudes = airbnb['longitude']
+    latitudes = latitudes.to_numpy()
+    longitudes = longitudes.to_numpy()
+    plt.scatter(x=longitudes, y=latitudes)
     plt.xlabel('Longitude')
     plt.ylabel('Latitude')
     plt.show()
@@ -17,7 +18,7 @@ def main():
     k = int(input('How many clusters? '))
     print(k)
 
-    sample_count = len(latitude)
+    sample_count = len(latitudes)
     points = []  # k unique points selected randomly.
     indices = []  # Sample indices of points already selected.
 
@@ -28,15 +29,37 @@ def main():
 
         # If the point has not already been chosen, then choose the point.
         if sample_index not in indices:
-            point = {'sample_index': sample_index,
-                     'coordinates': [longitude[sample_index], latitude[sample_index]]}
+            point = [longitudes[sample_index], latitudes[sample_index]]
             points.append(point)
             indices.append(sample_index)
 
     print(points)
 
+    clusters = []
+
+    # Add the index of each selected point to the list of clusters.
+    for i in range(k):
+        clusters.append([indices[i]])
+
+    # Assign cluster to each non-selected point.
+    for sample_index in range(sample_count):
+        # If the sample index is not a previously selected point, then assign it to a cluster.
+        if sample_index not in indices:
+            distances = []
+
+            # Calculate the distance from the current point to each selected cluster point.
+            for k_index in range(k):
+                distance = np.sqrt(np.square(points[k_index][0] - longitudes[sample_index]) +
+                                   np.square(points[k_index][1] - latitudes[sample_index]))
+                distances.append(distance)
+
+            # Find the closest cluster point.
+            min_distance = min(distances)
+            min_index = distances.index(min_distance)
+
+            # Add point to the closest cluster.
+            clusters[min_index].append(sample_index)
+
 
 if __name__ == '__main__':
     main()
-
-
