@@ -18,12 +18,15 @@ def main():
     print(k)
 
     sample_count = len(latitude)
-    points = []
-    indices = []
+    points = []  # k unique points selected randomly.
+    indices = []  # Sample indices of points already selected.
 
+    # Loop while the number of selected points is less than the number of clusters.
     while len(points) < k:
+        # Randomly select a sample index.
         sample_index = random.randint(0, sample_count - 1)
 
+        # If the point has not already been chosen, then choose the point.
         if sample_index not in indices:
             point = {'sample_index': sample_index,
                      'coordinates': [longitude[sample_index], latitude[sample_index]]}
