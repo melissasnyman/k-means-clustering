@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import random
 
 
+COLOURS = ['red', 'green', 'blue', 'yellow', 'purple']
+
+
 def main():
     airbnb = pd.read_csv('airbnb.csv')
     latitudes = airbnb['latitude']
@@ -59,6 +62,11 @@ def main():
 
             # Add point to the closest cluster.
             clusters[min_index].append(sample_index)
+
+    for i in range(k):
+        plt.scatter(x=longitudes[clusters[i]], y=latitudes[clusters[i]], c=COLOURS[i])
+
+    plt.show()
 
 
 if __name__ == '__main__':
